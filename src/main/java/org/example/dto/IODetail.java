@@ -1,9 +1,9 @@
 package org.example.dto;
 
 public record IODetail(
-        String Id,
-        String InOut,
-        Integer Quantity,
+        String id,
+        String inOut,
+        Integer quantity,
         Manager manager,
         Item item
 ) {
