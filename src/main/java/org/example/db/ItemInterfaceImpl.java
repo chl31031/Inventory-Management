@@ -1,8 +1,6 @@
 package org.example.db;
 
-import org.example.dto.CreateItem;
-import org.example.dto.Item;
-import org.example.dto.OutItemDetail;
+import org.example.dto.*;
 
 import java.util.List;
 
@@ -23,12 +21,21 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public void updateItem(CreateItem createItem) {
-
+    public void updateItem(UpdateItem updateItem) {
     }
 
     @Override
     public void deleteItem(String id) {
 
+    }
+
+    @Override
+    public void changeItemQuantity(UpdateItemQuantity updateItemQuantity) {
+
+    }
+
+    @Override
+    public Item getItemById(String id) {
+        return null;
     }
 }
