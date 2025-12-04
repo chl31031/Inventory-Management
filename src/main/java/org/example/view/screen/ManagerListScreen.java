@@ -27,6 +27,7 @@ public final class ManagerListScreen implements Screen {
 
     private void addManager() {
         System.out.println();
+        Main.screens.add(new ManagerAddScreen());
     }
 
     private void selectManager() {
