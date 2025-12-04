@@ -11,7 +11,7 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public List<Item> getItems() {
+    public List<Item> getItems(Integer page) {
         return List.of();
     }
 
@@ -37,5 +37,15 @@ public class ItemInterfaceImpl implements ItemInterface {
     @Override
     public Item getItemById(String id) {
         return null;
+    }
+
+    @Override
+    public List<Item> searchItems(String keyword) {
+        return List.of();
+    }
+
+    @Override
+    public List<Item> searchFilteredItems(FilteredKeyword filteredKeyword) {
+        return List.of();
     }
 }
