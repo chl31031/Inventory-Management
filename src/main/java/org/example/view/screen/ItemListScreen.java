@@ -42,6 +42,7 @@ public final class ItemListScreen implements Screen {
             screenText.append('\n');
         }
         screenText.append("페이지: ").append(page + 1).append('\n');
+        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, 숫자: 아이템 선택)").append('\n');
         System.out.print(screenText);
     }
 
