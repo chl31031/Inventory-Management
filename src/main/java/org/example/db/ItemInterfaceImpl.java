@@ -13,14 +13,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class ItemInterfaceImpl implements ItemInterface {
-    private final ItemInterfaceImpl INSTANCE = new ItemInterfaceImpl();
-    private CategoryInterfaceImpl ci = (CategoryInterfaceImpl) CategoryInterfaceImpl.getInstance();
+    private static final ItemInterfaceImpl INSTANCE = new ItemInterfaceImpl();
     Connection conn = DBConnection.getConnection();
 
     private ItemInterfaceImpl() {
     }
 
-    public ItemInterfaceImpl getInstance() {
+    public static ItemInterfaceImpl getInstance() {
         return INSTANCE;
     }
 
@@ -55,7 +54,6 @@ public class ItemInterfaceImpl implements ItemInterface {
         try {
             PreparedStatement psmt = conn.prepareStatement("""
                     SELECT * FROM ITEM
-                    ORDER BY ID
                     LIMIT ?, ?
                     """);
             psmt.setInt(1, page * 10);
@@ -82,7 +80,7 @@ public class ItemInterfaceImpl implements ItemInterface {
 
     @Override
     public OutItemDetail getOutItemDetail(String id) {
-        IODetailInterfaceImpl ii = IODetailInterfaceImpl.getInstance();
+        IODetailInterface ii = IODetailInterfaceImpl.getInstance();
 
         try {
             PreparedStatement psmt = conn.prepareStatement("""
@@ -99,6 +97,7 @@ public class ItemInterfaceImpl implements ItemInterface {
             var item = new Item(id, name, categoryId, quantity);
             List<IODetail> details = ii.getIODetailByItemId(itemId);
 
+            psmt.close();
             return new OutItemDetail(item, details);
         } catch (SQLException e) {
             throw new NoIdException();
@@ -202,6 +201,7 @@ public class ItemInterfaceImpl implements ItemInterface {
                 ));
             }
 
+            psmt.close();
         } catch (SQLException e) {
         }
         return al;
@@ -228,6 +228,7 @@ public class ItemInterfaceImpl implements ItemInterface {
                 ));
             }
 
+            psmt.close();
         } catch (SQLException e) {
         }
         return al;
