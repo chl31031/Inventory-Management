@@ -30,8 +30,9 @@ public final class ManagerListScreen implements Screen {
         Main.screens.add(new ManagerAddScreen());
     }
 
-    private void selectManager() {
+    private void selectManager(int index) {
         System.out.println();
+        Main.screens.add(new ItemListScreen(managerList.get(index)));
     }
 
     @Override
@@ -48,7 +49,7 @@ public final class ManagerListScreen implements Screen {
         }
         var selectedInt = Integer.parseInt(selected) - 1;
         if (selectedInt >= 0 && selectedInt < managerList.size()) {
-            selectManager();
+            selectManager(selectedInt);
             return;
         }
     }
