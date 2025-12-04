@@ -1,5 +1,6 @@
 package org.example.db;
 
+import org.example.dto.Category;
 import org.example.util.DBConnection;
 
 import java.sql.Connection;
@@ -18,16 +19,16 @@ public class CategoryInterfaceImpl implements CategoryInterface {
     }
 
     @Override
-    public List<String> getCategories() {
-        ArrayList<String> list = new ArrayList<>();
+    public List<Category> getCategories() {
+        ArrayList<Category> list = new ArrayList<>();
         try {
             PreparedStatement psmt = conn.prepareStatement("""
-                    SELECT NAME FROM CATEGORY
+                    SELECT * FROM CATEGORY
                     """);
             ResultSet rs = psmt.executeQuery();
 
             while (rs.next()) {
-                list.add(rs.getString(1));
+                list.add(new Category(rs.getString(1), rs.getString(2)));
             }
 
         } catch (SQLException e) {
@@ -85,6 +86,24 @@ public class CategoryInterfaceImpl implements CategoryInterface {
             return exists;
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    @Override
+    public String getCategoryIdByName(String name) {
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT 1 FROM CATEGORY WHERE NAME = ?
+                    """);
+            psmt.setString(1, name);
+            ResultSet rs = psmt.executeQuery();
+            String id = rs.getString(1);
+
+            psmt.close();
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
