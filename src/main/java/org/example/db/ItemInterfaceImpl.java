@@ -1,51 +1,235 @@
 package org.example.db;
 
 import org.example.dto.*;
+import org.example.util.DBConnection;
+import org.example.util.exception.NoIdException;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemInterfaceImpl implements ItemInterface {
-    @Override
-    public void createItem(CreateItem createItem) {
+    private final ItemInterfaceImpl INSTANCE = new ItemInterfaceImpl();
+    private CategoryInterfaceImpl ci = (CategoryInterfaceImpl) CategoryInterfaceImpl.getInstance();
+    Connection conn = DBConnection.getConnection();
 
+    private ItemInterfaceImpl() {
+    }
+
+    public ItemInterfaceImpl getInstance() {
+        return INSTANCE;
     }
 
     @Override
+    public void createItem(CreateItem createItem) {
+        try {
+
+            PreparedStatement psmt = conn.prepareStatement("""
+                    INSERT INTO ITEM VALUES(?,?,?,?)
+                    """);
+
+            psmt.setString(1, String.valueOf(UUID.randomUUID()));
+            psmt.setString(2, createItem.name());
+            psmt.setString(3, createItem.category());
+            psmt.setInt(4, 0);
+
+            psmt.executeUpdate();
+
+            psmt.close();
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
+    }
+
+    /**
+     * 제로베이스 넘버링 해주세요...
+     */
+    @Override
     public List<Item> getItems(Integer page) {
-        return List.of();
+        ArrayList<Item> list = new ArrayList<>();
+
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM
+                    ORDER BY ID
+                    LIMIT ?, ?
+                    """);
+            psmt.setInt(1, page * 10);
+            psmt.setInt(2, 10);
+
+            ResultSet rs = psmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Item(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4)
+                ));
+            }
+
+            psmt.close();
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
+
+        return list;
     }
 
     @Override
     public OutItemDetail getOutItemDetail(String id) {
-        return null;
+        IODetailInterfaceImpl ii = IODetailInterfaceImpl.getInstance();
+
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM WHERE ID = ?
+                    """);
+            psmt.setString(1, id);
+            ResultSet rs = psmt.executeQuery();
+
+            rs.next();
+            String itemId = rs.getString(1);
+            String name = rs.getString(2);
+            String categoryId = rs.getString(3);
+            Integer quantity = rs.getInt(4);
+            var item = new Item(id, name, categoryId, quantity);
+            List<IODetail> details = ii.getIODetailByItemId(itemId);
+
+            return new OutItemDetail(item, details);
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
     }
 
     @Override
     public void updateItem(UpdateItem updateItem) {
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    UPDATE ITEM SET NAME = ?
+                    WHERE ID = ?
+                    """);
+
+            psmt.setString(1, updateItem.name());
+            psmt.setString(2, updateItem.id());
+
+            psmt.executeUpdate();
+            psmt.close();
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
     }
 
     @Override
     public void deleteItem(String id) {
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    DELETE FROM ITEM WHERE ID=?
+                    """);
+            psmt.setString(1, id);
 
+            psmt.executeUpdate();
+
+            psmt.close();
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
     }
 
     @Override
     public void changeItemQuantity(UpdateItemQuantity updateItemQuantity) {
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    UPDATE ITEM SET QUANTITY = ?
+                    WHERE ID = ?
+                    """);
+            psmt.setInt(1, updateItemQuantity.quantity());
+            psmt.setString(2, updateItemQuantity.id());
 
+            psmt.executeUpdate();
+
+            psmt.close();
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
     }
 
     @Override
     public Item getItemById(String id) {
-        return null;
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM WHERE ID = ?
+                    """);
+            psmt.setString(1, id);
+
+            ResultSet rs = psmt.executeQuery();
+            rs.next();
+
+            Item item = new Item(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4)
+            );
+
+            psmt.close();
+            return item;
+        } catch (SQLException e) {
+            throw new NoIdException();
+        }
     }
 
     @Override
     public List<Item> searchItems(String keyword) {
-        return List.of();
+        ArrayList<Item> al = new ArrayList<>();
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM
+                    WHERE NAME = *?*
+                    """);
+            psmt.setString(1, keyword);
+            ResultSet rs = psmt.executeQuery();
+
+            while (rs.next()) {
+                al.add(new Item(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4)
+                ));
+            }
+
+        } catch (SQLException e) {
+        }
+        return al;
     }
 
     @Override
     public List<Item> searchFilteredItems(FilteredKeyword filteredKeyword) {
-        return List.of();
+        ArrayList<Item> al = new ArrayList<>();
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM
+                    WHERE CATEGORY_ID = ? AND NAME = *?*
+                    """);
+            psmt.setString(1, filteredKeyword.category());
+            psmt.setString(2, filteredKeyword.keyword());
+            ResultSet rs = psmt.executeQuery();
+
+            while (rs.next()) {
+                al.add(new Item(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4)
+                ));
+            }
+
+        } catch (SQLException e) {
+        }
+        return al;
     }
 }

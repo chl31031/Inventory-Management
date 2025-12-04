@@ -2,7 +2,6 @@ package org.example.dto;
 
 public record UpdateItem(
         String id,
-        String name,
-        String category
+        String name
 ) {
 }
