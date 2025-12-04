@@ -18,5 +18,6 @@ public class ManagerAddScreen implements Screen {
         var grade = scanner.nextLine();
         createManager.execute(name, grade);
         Main.screens.removeLast();
+        System.out.println();
     }
 }
