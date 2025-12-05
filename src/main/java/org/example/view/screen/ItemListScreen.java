@@ -117,5 +117,6 @@ public final class ItemListScreen extends Screen {
 
         var selectedInt = Integer.parseInt(selected) - 1;
         var item = items.get(selectedInt);
+        Main.screens.add(new ItemDetailScreen(item.id()));
     }
 }
