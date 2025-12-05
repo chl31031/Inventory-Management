@@ -1,13 +1,12 @@
 package org.example.view.viewcontroller.fake;
 
+import org.example.view.model.Category;
 import org.example.view.model.Item;
 import org.example.view.model.Manager;
-import org.example.view.viewcontroller.CreateManager;
-import org.example.view.viewcontroller.GetItemList;
-import org.example.view.viewcontroller.GetManagerList;
-import org.example.view.viewcontroller.ViewControllerContainer;
+import org.example.view.viewcontroller.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
@@ -15,6 +14,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
 
     private final ArrayList<Manager> managers = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
+    private final HashMap<String, Category> categories = new HashMap<>();
 
     public FakeViewControllerContainer() {
         managers.add(new Manager("id", "재우", "직급1"));
@@ -57,6 +57,14 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
             }
 
             return result.subList(Math.min(10 * page, result.size()), Math.min(10 * (page + 1), result.size()));
+        };
+    }
+
+    @Override
+    public CreateCategory createCategory() {
+        return (name) -> {
+            var id = getRandomString(6);
+            categories.put(id, new Category(id, name));
         };
     }
 
