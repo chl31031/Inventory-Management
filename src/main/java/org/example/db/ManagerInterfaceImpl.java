@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class ManagerInterfaceImpl implements ManagerInterface {
-    // 1. 싱글톤 - 자기 자신을 담을 static 변수 선언
     private static ManagerInterfaceImpl instance;
 
     // 2. 생성자를 private로 막아서 외부에서 new 금지
@@ -56,7 +55,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
                 managerList.add(manager);
                 System.out.println(manager);
 
-                System.out.printf("이름은 '%s' 이고 직급은 '%s' 입니다.\n", manager.name(), manager.grade());
 
             }//end while
             System.out.println("===============================");
@@ -73,9 +71,10 @@ public class ManagerInterfaceImpl implements ManagerInterface {
         //1. 사용자 - UUID
         String generatedId = UUID.randomUUID().toString();
 
-        // 2. SQL (id, name, grade)
-        String sql = "INSERT INTO MANAGER (id, name, grade) " +
-                "VALUES (?, ?, ?)";
+        // 2. SQL (id, name, grade) - 코드블록
+        String sql = """
+                 INSERT INTO MANAGER(id, name, grade)
+                 VALUES(?, ?, ?)""";
 
         try  {
             Connection conn = DBConnection.getConnection();
