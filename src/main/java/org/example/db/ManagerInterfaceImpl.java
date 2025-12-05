@@ -35,7 +35,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
         // 2. 전체 매니저를 조회하는 쿼리 작성
         String sql = "SELECT * FROM MANAGER";
 
-
         try  {
 
             Connection conn = DBConnection.getConnection();
