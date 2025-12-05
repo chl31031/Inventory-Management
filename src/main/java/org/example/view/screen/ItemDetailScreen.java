@@ -75,6 +75,10 @@ public class ItemDetailScreen extends Screen {
         Main.screens.add(new ItemIOAddScreen(itemID, manager));
     }
 
+    private void editItem() {
+        Main.screens.add(new ItemEditScreen(itemID));
+    }
+
     private void removeItem() {
         Main.screens.add(new ItemRemoveScreen(itemID));
     }
@@ -103,7 +107,7 @@ public class ItemDetailScreen extends Screen {
         } else if (selected.equalsIgnoreCase("a")) {
             addIODetail();
         } else if (selected.equalsIgnoreCase("x")) {
-
+            editItem();
         } else if (selected.equalsIgnoreCase("r")) {
             removeItem();
         }
