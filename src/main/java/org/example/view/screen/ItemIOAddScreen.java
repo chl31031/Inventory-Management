@@ -31,6 +31,7 @@ public class ItemIOAddScreen extends Screen {
         }
         System.out.println("개수: ");
         var quantity = scanner.nextInt();
+        System.out.println();
         if (quantity < 0) {
             return;
         }
