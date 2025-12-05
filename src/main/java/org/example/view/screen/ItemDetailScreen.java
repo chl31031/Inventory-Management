@@ -106,7 +106,7 @@ public class ItemDetailScreen extends Screen {
 
         var selectedInt = Integer.parseInt(selected) - 1;
         if (selectedInt >= 0 && selectedInt < this.ioList.size()) {
-
+            Main.screens.add(new ItemIORemoveScreen(ioList.get(selectedInt).id()));
         }
 
     }
