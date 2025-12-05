@@ -42,7 +42,7 @@ public final class ItemListScreen implements Screen {
             screenText.append('\n');
         }
         screenText.append("페이지: ").append(page + 1).append('\n');
-        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, 숫자: 아이템 선택)").append('\n');
+        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, c: 카테고리 추가, 숫자: 아이템 선택)").append('\n');
         System.out.print(screenText);
     }
 
@@ -67,6 +67,11 @@ public final class ItemListScreen implements Screen {
 
     }
 
+    private void addCategory() {
+        System.out.println();
+        Main.screens.add(new CategoryAddScreen());
+    }
+
     @Override
     public void action() {
         items = getItemList.execute(page, null, null);
@@ -82,6 +87,8 @@ public final class ItemListScreen implements Screen {
             exit();
         } else if (selected.equalsIgnoreCase("a")) {
             addItem();
+        } else if (selected.equalsIgnoreCase("c")) {
+            addCategory();
         }
 
         var selectedInt = Integer.parseInt(selected) - 1;
