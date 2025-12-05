@@ -35,7 +35,7 @@ public class ItemIOAddScreen extends Screen {
         if (quantity < 0) {
             return;
         }
-        createItemIO.createIO(itemID, io, quantity);
+        createItemIO.execute(itemID, io, quantity);
         Main.screens.removeLast();
     }
 }
