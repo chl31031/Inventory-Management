@@ -115,6 +115,42 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         };
     }
 
+    @Override
+    public CreateItemIO createItemIO() {
+        return (itemID, io, quantity) -> {
+            for (var i = 0; i < items.size(); i++) {
+                var item = items.get(i);
+                if (item.id().equals(itemID)) {
+                    items.remove(i);
+                    var newQuantity = item.quantity();
+                    if (io == IO.IN) {
+                        newQuantity += quantity;
+                    } else {
+                        newQuantity -= quantity;
+                    }
+                    items.addFirst(new Item(
+                            item.id(),
+                            item.name(),
+                            item.categoryID(),
+                            item.category(),
+                            newQuantity
+                    ));
+
+                    if (!itemToItemIOList.containsKey(itemID)) {
+                        itemToItemIOList.put(itemID, new ArrayList<>());
+                    }
+                    itemToItemIOList.get(itemID).addFirst(new ItemIO(
+                            getRandomString(6),
+                            quantity,
+                            io,
+                            ZonedDateTime.now()
+                    ));
+                    return;
+                }
+            }
+        };
+    }
+
     private String getRandomString(int targetStringLength) {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
