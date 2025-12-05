@@ -30,6 +30,7 @@ public class ItemSearchScreen extends Screen {
         printSearch();
         var scanner = new Scanner(System.in);
         var search = scanner.nextLine();
+        System.out.println();
         Main.screens.removeLast();
         Main.screens.getLast().setResult(ResultKey.SEARCH, search);
     }
