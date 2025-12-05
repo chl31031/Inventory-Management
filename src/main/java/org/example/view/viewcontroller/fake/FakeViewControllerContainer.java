@@ -22,15 +22,14 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         var r = new Random();
         for (var i = 0; i < 5; i++) {
             var categoryID = getRandomString(6);
-            var categoryName = getRandomString(4);
             items.add(new Item(
                     getRandomString(6),
                     getRandomString(12),
                     categoryID,
-                    categoryName,
+                    categoryID,
                     r.nextInt(10, 100)
             ));
-            categories.put(categoryID, new Category(categoryID, categoryName));
+            categories.put(categoryID, new Category(categoryID, categoryID));
         }
     }
 
