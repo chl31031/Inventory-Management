@@ -12,7 +12,7 @@ public final class ItemListScreen extends Screen {
     private final Manager manager;
     private final GetItemList getItemList = Main.viewControllerContainer.getItemList();
     private final int page;
-    private final String search;
+    private String search;
     private final String categoryID;
     private List<Item> items = null;
 
@@ -42,7 +42,7 @@ public final class ItemListScreen extends Screen {
             screenText.append('\n');
         }
         screenText.append("페이지: ").append(page + 1).append('\n');
-        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, c: 카테고리 추가, 숫자: 아이템 선택)").append('\n');
+        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, c: 카테고리 추가, s: 아이템 이름 검색, 숫자: 아이템 선택)").append('\n');
         System.out.print(screenText);
     }
 
@@ -72,9 +72,19 @@ public final class ItemListScreen extends Screen {
         Main.screens.add(new CategoryAddScreen());
     }
 
+    private void searchItem() {
+        System.out.println();
+        Main.screens.add(new ItemSearchScreen(search));
+    }
+
     @Override
     public void action() {
-        items = getItemList.execute(page, null, null);
+        var searchResult = getResult(ResultKey.SEARCH);
+        if (searchResult != null) {
+            this.search = searchResult;
+            removeResult(ResultKey.SEARCH);
+        }
+        items = getItemList.execute(page, this.search, null);
 
         printItems();
         var scanner = new Scanner(System.in);
@@ -89,6 +99,8 @@ public final class ItemListScreen extends Screen {
             addItem();
         } else if (selected.equalsIgnoreCase("c")) {
             addCategory();
+        } else if (selected.equalsIgnoreCase("s")) {
+            searchItem();
         }
 
         var selectedInt = Integer.parseInt(selected) - 1;
