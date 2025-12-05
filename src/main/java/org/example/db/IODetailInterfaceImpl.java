@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class IODetailInterfaceImpl implements IODetailInterface {
-    private Connection conn = DBConnection.getInstance().getConnection();
+    private Connection conn = DBConnection.getConnection();
 
     private final ManagerInterface managerDao = ManagerInterfaceImpl.getInstance();
     private final ItemInterface itemDao = ItemInterfaceImpl.getInstance();
@@ -24,10 +24,13 @@ public class IODetailInterfaceImpl implements IODetailInterface {
 
     @Override
     public String createIODetail(CreateIODetail dto) {
-        //uuid 생성
         String newId = UUID.randomUUID().toString();
+        PreparedStatement pstmt = null;
+        try {
+            if (conn != null) {
 
-        try (PreparedStatement pstmt = conn.prepareStatement(INSERT_QUERY)) {
+            }
+            pstmt = conn.prepareStatement(INSERT_QUERY);
 
             pstmt.setString(1, newId); // id
             pstmt.setString(2, dto.io().name());//
@@ -39,11 +42,12 @@ public class IODetailInterfaceImpl implements IODetailInterface {
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                //저장 후 생성된 아이디
                 return newId;
             }
         } catch (SQLException e) {
 
+        }finally {
+            DBConnection.closeResources(pstmt, null);
         }
         return null;
     }
@@ -64,7 +68,7 @@ public class IODetailInterfaceImpl implements IODetailInterface {
                     String managerId = rs.getString("MANAGER_ID");
                     String itemId = rs.getString("ITEM_ID");
 
-                    /*가짜 객체 반환 가정*/
+                    //
                     Manager manager = managerDao.getManagerById(managerId);
                     Item item = itemDao.getItemById(itemId);
 
