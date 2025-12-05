@@ -9,5 +9,5 @@ public interface ManagerInterface {
     List<Manager> getManagers();
     void createManager(CreateManager createManager);
 
-    Manager findById(String id);
+    Manager getManagerById(String id);
 }

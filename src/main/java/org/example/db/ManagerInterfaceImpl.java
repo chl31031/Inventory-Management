@@ -25,7 +25,7 @@ public class ManagerInterfaceImpl implements ManagerInterface{
     }
 
     @Override
-    public Manager findById(String id){
+    public Manager getManagerById(String id){
        /* createIODetail test용
         System.out.println("가짜 객체" + id);
         return new Manager(
