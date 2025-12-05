@@ -15,5 +15,5 @@ public interface ItemInterface {
     List<Item> searchItems(String keyword);
     List<Item> searchFilteredItems(FilteredKeyword filteredKeyword);
 
-    Item findById(String id);
+//    Item findById(String id);
 }

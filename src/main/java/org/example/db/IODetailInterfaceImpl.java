@@ -74,7 +74,7 @@ public class IODetailInterfaceImpl implements IODetailInterface {
 
                 /*가짜 객체 반환 가정*/
                 Manager manager = managerDao.findById(managerId);
-                Item item = itemDao.findById(itemId);
+                Item item = itemDao.getItemById(itemId);
 
                 if (manager != null && item != null) {
                     IODetail detail = new IODetail(

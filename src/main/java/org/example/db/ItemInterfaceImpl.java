@@ -44,10 +44,6 @@ public class ItemInterfaceImpl implements ItemInterface {
 
     }
 
-    @Override
-    public Item getItemById(String id) {
-        return null;
-    }
 
     @Override
     public List<Item> searchItems(String keyword) {
@@ -60,15 +56,15 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public Item findById(String id) {
-/* createIODetail test용
+    public Item getItemById(String id) {
+/* createIODetail test용*/
         System.out.println("가짜" + id);
         return new Item(
                 id,
                 "name",
                 "category",
                 1000
-        );*/
-        return null;
+        );
+//        return null;
     }
 }
