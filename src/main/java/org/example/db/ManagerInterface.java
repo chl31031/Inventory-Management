@@ -8,4 +8,6 @@ import java.util.List;
 public interface ManagerInterface {
     List<Manager> getManagers();
     void createManager(CreateManager createManager);
+
+    Manager findById(String id);
 }
