@@ -76,6 +76,16 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         return () -> categories.values().stream().toList();
     }
 
+    @Override
+    public CreateItem createItem() {
+        return (name, categoryID) -> {
+            items.addFirst(new Item(
+                    getRandomString(6), name, categoryID, categoryID, 0
+            ));
+            categories.put(categoryID, new Category(categoryID, categoryID));
+        };
+    }
+
     private String getRandomString(int targetStringLength) {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
