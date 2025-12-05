@@ -67,6 +67,10 @@ public class ItemDetailScreen extends Screen {
         Main.screens.removeLast();
     }
 
+    private void addIODetail() {
+        Main.screens.add(new ItemIOAddScreen(itemID));
+    }
+
     @Override
     public void action() {
         this.item = getItem.execute(itemID);
@@ -89,7 +93,7 @@ public class ItemDetailScreen extends Screen {
         } else if (selected.equalsIgnoreCase("e")) {
             exit();
         } else if (selected.equalsIgnoreCase("a")) {
-
+            addIODetail();
         } else if (selected.equalsIgnoreCase("x")) {
 
         } else if (selected.equalsIgnoreCase("r")) {
