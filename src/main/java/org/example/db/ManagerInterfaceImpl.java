@@ -53,7 +53,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
 
             }//end while
-            System.out.println("===============================");
             pstmt.close();
         } catch (Exception e) {
         }
