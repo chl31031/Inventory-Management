@@ -2,6 +2,7 @@ package org.example.view.screen;
 
 import org.example.Main;
 import org.example.view.model.IO;
+import org.example.view.model.Manager;
 import org.example.view.viewcontroller.CreateItemIO;
 
 import java.util.Scanner;
@@ -9,10 +10,12 @@ import java.util.Scanner;
 public class ItemIOAddScreen extends Screen {
 
     private final String itemID;
+    private final Manager manager;
     private final CreateItemIO createItemIO = Main.viewControllerContainer.createItemIO();
 
-    public ItemIOAddScreen(String itemID) {
+    public ItemIOAddScreen(String itemID, Manager manager) {
         this.itemID = itemID;
+        this.manager = manager;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class ItemIOAddScreen extends Screen {
         if (quantity < 0) {
             return;
         }
-        createItemIO.execute(itemID, io, quantity);
+        createItemIO.execute(itemID, io, quantity, manager.id());
         Main.screens.removeLast();
     }
 }

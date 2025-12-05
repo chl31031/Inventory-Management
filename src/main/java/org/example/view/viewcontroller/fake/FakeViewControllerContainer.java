@@ -34,6 +34,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
                     getRandomString(6),
                     initialQuantity,
                     IO.IN,
+                    "재우",
                     ZonedDateTime.now()
             ))));
         }
@@ -117,7 +118,12 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
 
     @Override
     public CreateItemIO createItemIO() {
-        return (itemID, io, quantity) -> {
+        return (itemID, io, quantity, managerID) -> {
+            var manager = managers.stream().filter(m -> Objects.equals(m.id(), managerID)).findFirst().orElse(null);
+            if (manager == null) {
+                return;
+            }
+
             for (var i = 0; i < items.size(); i++) {
                 var item = items.get(i);
                 if (item.id().equals(itemID)) {
@@ -143,6 +149,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
                             getRandomString(6),
                             quantity,
                             io,
+                            manager.name(),
                             ZonedDateTime.now()
                     ));
                     return;
