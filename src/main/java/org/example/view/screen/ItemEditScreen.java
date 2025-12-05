@@ -28,6 +28,7 @@ public class ItemEditScreen extends Screen {
         var scanner = new Scanner(System.in);
         System.out.print(item.name() + "의 새로운 이름: ");
         var name = scanner.nextLine();
+        System.out.println();
         updateItem.updateItem(item.id(), name);
 
         Main.screens.removeLast();
