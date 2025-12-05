@@ -63,6 +63,8 @@ public class CategoryInterfaceImpl implements CategoryInterface {
                     """);
             psmt.setString(1, id);
             int i = psmt.executeUpdate();
+            psmt.close();
+
             if (i < 1) throw new NoIdException();
         } catch (SQLException e) {
             throw new FkException();
