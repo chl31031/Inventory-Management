@@ -110,7 +110,8 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
             if (!itemToItemIOList.containsKey(itemID)) {
                 itemToItemIOList.put(itemID, new ArrayList<>());
             }
-            return itemToItemIOList.get(itemID);
+            var result = itemToItemIOList.get(itemID);
+            return result.subList(Math.min(10 * page, result.size()), Math.min(10 * (page + 1), result.size()));
         };
     }
 
