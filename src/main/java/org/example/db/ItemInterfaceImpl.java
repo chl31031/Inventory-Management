@@ -272,4 +272,30 @@ public class ItemInterfaceImpl implements ItemInterface {
         }
         return al;
     }
+
+    @Override
+    public List<Item> filteredItems(String category) {
+        ArrayList<Item> al = new ArrayList<>();
+        try {
+            PreparedStatement psmt = conn.prepareStatement("""
+                    SELECT * FROM ITEM
+                    WHERE CATEGORY_ID = ?
+                    """);
+            psmt.setString(1, category);
+            ResultSet rs = psmt.executeQuery();
+
+            while (rs.next()) {
+                al.add(new Item(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4)
+                ));
+            }
+
+            psmt.close();
+        } catch (SQLException e) {
+        }
+        return al;
+    }
 }
