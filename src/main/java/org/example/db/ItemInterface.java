@@ -12,7 +12,7 @@ public interface ItemInterface {
     void deleteItem(String id);
     void changeItemQuantity(UpdateItemQuantity updateItemQuantity);
     Item getItemById(String id);
-    List<Item> searchItems(String keyword);
-    List<Item> searchFilteredItems(FilteredKeyword filteredKeyword);
-    List<Item> filteredItems(String category);
+    List<Item> searchItems(String keyword,Integer page);
+    List<Item> searchFilteredItems(FilteredKeyword filteredKeyword,Integer page);
+    List<Item> filteredItems(String category ,Integer page);
 }

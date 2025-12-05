@@ -192,14 +192,17 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public List<Item> searchItems(String keyword) {
+    public List<Item> searchItems(String keyword,Integer page) {
         ArrayList<Item> al = new ArrayList<>();
         try {
             PreparedStatement psmt = conn.prepareStatement("""
                     SELECT * FROM ITEM
-                    WHERE NAME = *?*
+                    WHERE NAME LIKE CONCAT('%', ?, '%')
+                    LIMIT ?, ?
                     """);
             psmt.setString(1, keyword);
+            psmt.setInt(2, page * 10);
+            psmt.setInt(3, 10);
             ResultSet rs = psmt.executeQuery();
 
             while (rs.next()) {
@@ -219,15 +222,19 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public List<Item> searchFilteredItems(FilteredKeyword filteredKeyword) {
+    public List<Item> searchFilteredItems(FilteredKeyword filteredKeyword,Integer page) {
         ArrayList<Item> al = new ArrayList<>();
         try {
             PreparedStatement psmt = conn.prepareStatement("""
                     SELECT * FROM ITEM
-                    WHERE CATEGORY_ID = ? AND NAME = *?*
+                    WHERE CATEGORY_ID = ? 
+                      AND NAME LIKE CONCAT('%', ?, '%')
+                    LIMIT ?, ?
                     """);
             psmt.setString(1, filteredKeyword.category());
             psmt.setString(2, filteredKeyword.keyword());
+            psmt.setInt(3, page * 10);
+            psmt.setInt(4, 10);
             ResultSet rs = psmt.executeQuery();
 
             while (rs.next()) {
@@ -247,14 +254,17 @@ public class ItemInterfaceImpl implements ItemInterface {
     }
 
     @Override
-    public List<Item> filteredItems(String category) {
+    public List<Item> filteredItems(String category,Integer page) {
         ArrayList<Item> al = new ArrayList<>();
         try {
             PreparedStatement psmt = conn.prepareStatement("""
                     SELECT * FROM ITEM
                     WHERE CATEGORY_ID = ?
+                    LIMIT ?, ?
                     """);
             psmt.setString(1, category);
+            psmt.setInt(2, page * 10);
+            psmt.setInt(3, 10);
             ResultSet rs = psmt.executeQuery();
 
             while (rs.next()) {
@@ -269,32 +279,6 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.close();
         } catch (SQLException e) {
             throw new UnknownException();
-        }
-        return al;
-    }
-
-    @Override
-    public List<Item> filteredItems(String category) {
-        ArrayList<Item> al = new ArrayList<>();
-        try {
-            PreparedStatement psmt = conn.prepareStatement("""
-                    SELECT * FROM ITEM
-                    WHERE CATEGORY_ID = ?
-                    """);
-            psmt.setString(1, category);
-            ResultSet rs = psmt.executeQuery();
-
-            while (rs.next()) {
-                al.add(new Item(
-                        rs.getString(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4)
-                ));
-            }
-
-            psmt.close();
-        } catch (SQLException e) {
         }
         return al;
     }
