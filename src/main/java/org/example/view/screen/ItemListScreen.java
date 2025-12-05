@@ -12,7 +12,7 @@ public final class ItemListScreen extends Screen {
     private final Manager manager;
     private final GetItemList getItemList = Main.viewControllerContainer.getItemList();
     private final int page;
-    private final String search;
+    private String search;
     private final String categoryID;
     private List<Item> items = null;
 
@@ -72,9 +72,19 @@ public final class ItemListScreen extends Screen {
         Main.screens.add(new CategoryAddScreen());
     }
 
+    private void searchItem() {
+        System.out.println();
+        Main.screens.add(new ItemSearchScreen(search));
+    }
+
     @Override
     public void action() {
-        items = getItemList.execute(page, null, null);
+        var searchResult = getResult(ResultKey.SEARCH);
+        if (searchResult != null) {
+            this.search = searchResult;
+            removeResult(ResultKey.SEARCH);
+        }
+        items = getItemList.execute(page, this.search, null);
 
         printItems();
         var scanner = new Scanner(System.in);
@@ -89,6 +99,8 @@ public final class ItemListScreen extends Screen {
             addItem();
         } else if (selected.equalsIgnoreCase("c")) {
             addCategory();
+        } else if (selected.equalsIgnoreCase("s")) {
+            searchItem();
         }
 
         var selectedInt = Integer.parseInt(selected) - 1;
