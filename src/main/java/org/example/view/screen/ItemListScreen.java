@@ -13,17 +13,17 @@ public final class ItemListScreen extends Screen {
     private final GetItemList getItemList = Main.viewControllerContainer.getItemList();
     private final int page;
     private String search;
-    private final String categoryID;
+    private String categoryFilterID;
     private List<Item> items = null;
 
-    public ItemListScreen(Manager manager, int page, String search, String categoryID) {
+    public ItemListScreen(Manager manager, int page, String search, String categoryFilterID) {
         this.manager = manager;
         if (page < 0) {
             page = 0;
         }
         this.page = page;
         this.search = search;
-        this.categoryID = categoryID;
+        this.categoryFilterID = categoryFilterID;
     }
 
     public ItemListScreen(Manager manager) {
@@ -49,13 +49,13 @@ public final class ItemListScreen extends Screen {
     private void nextPage() {
         System.out.println();
         Main.screens.removeLast();
-        Main.screens.add(new ItemListScreen(manager, page + 1, search, categoryID));
+        Main.screens.add(new ItemListScreen(manager, page + 1, search, categoryFilterID));
     }
 
     private void prevPage() {
         System.out.println();
         Main.screens.removeLast();
-        Main.screens.add(new ItemListScreen(manager, page - 1, search, categoryID));
+        Main.screens.add(new ItemListScreen(manager, page - 1, search, categoryFilterID));
     }
 
     private void exit() {
@@ -77,6 +77,11 @@ public final class ItemListScreen extends Screen {
         Main.screens.add(new ItemSearchScreen(search));
     }
 
+    private void filterCategory() {
+        System.out.println();
+        Main.screens.add(new CategorySelectScreen());
+    }
+
     @Override
     public void action() {
         var searchResult = getResult(ResultKey.SEARCH);
@@ -84,7 +89,11 @@ public final class ItemListScreen extends Screen {
             this.search = searchResult;
             removeResult(ResultKey.SEARCH);
         }
-        items = getItemList.execute(page, this.search, null);
+        if (hasResult(ResultKey.CATEGORY_ID)) {
+            this.categoryFilterID = getResult(ResultKey.CATEGORY_ID);
+            removeResult(ResultKey.CATEGORY_ID);
+        }
+        items = getItemList.execute(page, this.search, this.categoryFilterID);
 
         printItems();
         var scanner = new Scanner(System.in);
@@ -101,6 +110,8 @@ public final class ItemListScreen extends Screen {
             addCategory();
         } else if (selected.equalsIgnoreCase("s")) {
             searchItem();
+        } else if (selected.equalsIgnoreCase("f")) {
+            filterCategory();
         }
 
         var selectedInt = Integer.parseInt(selected) - 1;
