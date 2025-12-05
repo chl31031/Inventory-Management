@@ -12,4 +12,5 @@ public interface ViewControllerContainer {
     CreateItemIO createItemIO();
     DeleteItemIO deleteItemIO();
     DeleteItem deleteItem();
+    UpdateItem updateItem();
 }
