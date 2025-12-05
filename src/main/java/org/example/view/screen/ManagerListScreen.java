@@ -7,7 +7,7 @@ import org.example.view.viewcontroller.GetManagerList;
 import java.util.List;
 import java.util.Scanner;
 
-public final class ManagerListScreen implements Screen {
+public final class ManagerListScreen extends Screen {
 
     private final GetManagerList getManagerList = Main.viewControllerContainer.getManagerList();
     private List<Manager> managerList = null;
@@ -27,10 +27,12 @@ public final class ManagerListScreen implements Screen {
 
     private void addManager() {
         System.out.println();
+        Main.screens.add(new ManagerAddScreen());
     }
 
-    private void selectManager() {
+    private void selectManager(int index) {
         System.out.println();
+        Main.screens.add(new ItemListScreen(managerList.get(index)));
     }
 
     @Override
@@ -47,7 +49,7 @@ public final class ManagerListScreen implements Screen {
         }
         var selectedInt = Integer.parseInt(selected) - 1;
         if (selectedInt >= 0 && selectedInt < managerList.size()) {
-            selectManager();
+            selectManager(selectedInt);
             return;
         }
     }
