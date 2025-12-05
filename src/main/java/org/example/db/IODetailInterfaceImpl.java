@@ -20,4 +20,8 @@ public class IODetailInterfaceImpl implements IODetailInterface{
     public List<IODetail> getIODetailByItemId(String id) {
         return List.of();
     }
+
+    public static IODetailInterfaceImpl getInstance(){
+        return null;
+    }
 }
