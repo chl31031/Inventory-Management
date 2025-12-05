@@ -5,4 +5,5 @@ public interface ViewControllerContainer {
     CreateManager createManager();
     GetItemList getItemList();
     CreateCategory createCategory();
+    GetCategoryList getCategoryList();
 }
