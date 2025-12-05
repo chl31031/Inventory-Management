@@ -5,7 +5,7 @@ import org.example.view.viewcontroller.CreateCategory;
 
 import java.util.Scanner;
 
-public class CategoryAddScreen implements Screen {
+public class CategoryAddScreen extends Screen {
 
     private final CreateCategory createCategory = Main.viewControllerContainer.createCategory();
 

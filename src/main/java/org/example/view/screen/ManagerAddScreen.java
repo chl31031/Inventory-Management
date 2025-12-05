@@ -5,7 +5,7 @@ import org.example.view.viewcontroller.CreateManager;
 
 import java.util.Scanner;
 
-public class ManagerAddScreen implements Screen {
+public class ManagerAddScreen extends Screen {
 
     private final CreateManager createManager = Main.viewControllerContainer.createManager();
 
