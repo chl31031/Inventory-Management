@@ -14,12 +14,10 @@ import java.util.UUID;
 public class ManagerInterfaceImpl implements ManagerInterface {
     private static ManagerInterfaceImpl instance;
 
-    // 2. 생성자를 private로 막아서 외부에서 new 금지
     private ManagerInterfaceImpl() {
 
     }
 
-    // 3. [싱글톤] 외부에서 이 객체를 가져갈 수 있는 유일한 통로
     public static ManagerInterfaceImpl getInstance() {
         if (instance == null) {
             instance = new ManagerInterfaceImpl();
@@ -41,7 +39,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
             // 3. 쿼리 실행 결과를 ResultSet에 담음 ( 조회는 executeQuery 사용)
             ResultSet rs = pstmt.executeQuery();
-            System.out.println("리스트 목록이 불러왔습니다.");
 
             while (rs.next()) {
                 //DB 컬럼명  : ID, NAME, GRADE
@@ -53,7 +50,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
                 //6. 리스트에 추가
                 managerList.add(manager);
-                System.out.println(manager);
 
 
             }//end while
@@ -85,9 +81,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
             pstmt.setString(3, createManager.grade());
 //            4. 실행 (DB로 전송)
             int result = pstmt.executeUpdate();
-            if (result > 0) {
-                System.out.println("Manager 등록 완료! ManagerID : " + generatedId);
-            }
+
 
 
         } catch (Exception e) {
