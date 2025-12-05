@@ -1,0 +1,105 @@
+package org.example.view.screen;
+
+import org.example.Main;
+import org.example.view.model.Item;
+import org.example.view.model.ItemIO;
+import org.example.view.viewcontroller.GetItem;
+import org.example.view.viewcontroller.GetItemIOList;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.List;
+import java.util.Scanner;
+
+public class ItemDetailScreen extends Screen {
+
+    private final String itemID;
+    private Item item;
+    private List<ItemIO> ioList = null;
+    private final GetItem getItem = Main.viewControllerContainer.getItem();
+    private final GetItemIOList getItemIOList = Main.viewControllerContainer.getItemIOList();
+    private int page;
+
+    public ItemDetailScreen(String itemID, int page) {
+        this.itemID = itemID;
+        if (page < 0) {
+            page = 0;
+        }
+        this.page = page;
+    }
+
+    public ItemDetailScreen(String itemID) {
+        this(itemID, 0);
+    }
+
+    private void printItem() {
+        this.ioList = getItemIOList.execute(item.id(), page);
+        if (ioList == null) {
+            return;
+        }
+
+        var p = new StringBuilder();
+        p.append("아이템 이름: ").append(item.name()).append('\n');
+        for (var i = 0; i < ioList.size(); i++) {
+            var io = ioList.get(i);
+            p.append(i + 1).append(". ");
+            p.append(io.io()).append(" ");
+            p.append(io.quantity()).append(" ");
+            p.append(io.time().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))).append(" ");
+            p.append('\n');
+        }
+        p.append("페이지: ").append(page + 1).append('\n');
+        p.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지)").append('\n');
+        System.out.print(p);
+    }
+
+    private void nextPage() {
+        Main.screens.removeLast();
+        Main.screens.add(new ItemDetailScreen(itemID, page + 1));
+    }
+
+    private void prevPage() {
+        Main.screens.removeLast();
+        Main.screens.add(new ItemDetailScreen(itemID, page - 1));
+    }
+
+    private void exit() {
+        Main.screens.removeLast();
+    }
+
+    @Override
+    public void action() {
+        this.item = getItem.execute(itemID);
+        if (item == null) {
+            Main.screens.removeLast();
+            return;
+        }
+
+        printItem();
+        if (ioList == null) {
+            return;
+        }
+
+        var scanner = new Scanner(System.in);
+        var selected = scanner.nextLine();
+        if (selected.equalsIgnoreCase("n")) {
+            nextPage();
+        } else if (selected.equalsIgnoreCase("p")) {
+            prevPage();
+        } else if (selected.equalsIgnoreCase("e")) {
+            exit();
+        } else if (selected.equalsIgnoreCase("a")) {
+
+        } else if (selected.equalsIgnoreCase("x")) {
+
+        } else if (selected.equalsIgnoreCase("r")) {
+
+        }
+
+        var selectedInt = Integer.parseInt(selected) - 1;
+        if (selectedInt >= 0 && selectedInt < this.ioList.size()) {
+
+        }
+
+    }
+}

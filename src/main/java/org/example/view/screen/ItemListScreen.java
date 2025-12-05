@@ -47,39 +47,32 @@ public final class ItemListScreen extends Screen {
     }
 
     private void nextPage() {
-        System.out.println();
         Main.screens.removeLast();
         Main.screens.add(new ItemListScreen(manager, page + 1, search, categoryFilterID));
     }
 
     private void prevPage() {
-        System.out.println();
         Main.screens.removeLast();
         Main.screens.add(new ItemListScreen(manager, page - 1, search, categoryFilterID));
     }
 
     private void exit() {
-        System.out.println();
         Main.screens.removeLast();
     }
 
     private void addItem() {
-        System.out.println();
         Main.screens.add(new ItemAddScreen());
     }
 
     private void addCategory() {
-        System.out.println();
         Main.screens.add(new CategoryAddScreen());
     }
 
     private void searchItem() {
-        System.out.println();
         Main.screens.add(new ItemSearchScreen(search));
     }
 
     private void filterCategory() {
-        System.out.println();
         Main.screens.add(new CategorySelectScreen());
     }
 
@@ -99,6 +92,7 @@ public final class ItemListScreen extends Screen {
         printItems();
         var scanner = new Scanner(System.in);
         var selected = scanner.nextLine();
+        System.out.println();
         if (selected.equalsIgnoreCase("n")) {
             nextPage();
         } else if (selected.equalsIgnoreCase("p")) {
@@ -117,5 +111,6 @@ public final class ItemListScreen extends Screen {
 
         var selectedInt = Integer.parseInt(selected) - 1;
         var item = items.get(selectedInt);
+        Main.screens.add(new ItemDetailScreen(item.id()));
     }
 }
