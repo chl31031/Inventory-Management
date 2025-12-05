@@ -42,7 +42,7 @@ public final class ItemListScreen extends Screen {
             screenText.append('\n');
         }
         screenText.append("페이지: ").append(page + 1).append('\n');
-        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, c: 카테고리 추가, s: 아이템 이름 검색, f: 카테고리 선택, 숫자: 아이템 선택)").append('\n');
+        screenText.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, a: 아이템 추가, c: 카테고리 추가, s: 아이템 이름 검색, f: 카테고리 선택, 숫자: 아이템 선택)").append('\n');
         System.out.print(screenText);
     }
 
@@ -64,7 +64,8 @@ public final class ItemListScreen extends Screen {
     }
 
     private void addItem() {
-
+        System.out.println();
+        Main.screens.add(new ItemAddScreen());
     }
 
     private void addCategory() {
