@@ -193,6 +193,19 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         };
     }
 
+    @Override
+    public DeleteItem deleteItem() {
+        return itemID -> {
+            for (var i = 0; i < items.size(); i++) {
+                var item = items.get(i);
+                if (item.id().equals(itemID)) {
+                    items.remove(i);
+                    return;
+                }
+            }
+        };
+    }
+
     private String getRandomString(int targetStringLength) {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
