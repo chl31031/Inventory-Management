@@ -17,7 +17,7 @@ public class CategorySelectScreen extends Screen {
         for (var i = 0; i < categoryList.size(); i++) {
             var category = categoryList.get(i);
             screenText.append(i + 1).append(". ");
-            screenText.append(category.name()).append(' ');
+            screenText.append(category.name()).append('\n');
         }
         screenText.append("(e: 취소, x: 선택 제거, 숫자: 카테고리 선택)");
         System.out.println(screenText);
@@ -33,6 +33,7 @@ public class CategorySelectScreen extends Screen {
         printCategories();
         var scanner = new Scanner(System.in);
         var selected = scanner.nextLine();
+        System.out.println();
         if (selected.equalsIgnoreCase("e")) {
             Main.screens.removeLast();
             return;
