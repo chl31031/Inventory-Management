@@ -3,6 +3,8 @@ package org.example.db;
 import org.example.dto.CreateManager;
 import org.example.dto.Manager;
 import org.example.util.DBConnection;
+import org.example.util.exception.UnknownException;
+import org.example.util.exception.WrongCreateManagerException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +15,7 @@ import java.util.UUID;
 
 public class ManagerInterfaceImpl implements ManagerInterface {
     private static ManagerInterfaceImpl instance;
+
 
     private ManagerInterfaceImpl() {
 
@@ -55,6 +58,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
             }//end while
             pstmt.close();
         } catch (Exception e) {
+            throw new UnknownException();
         }
 
         return managerList;
@@ -84,7 +88,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
 
         } catch (Exception e) {
-
+            throw new WrongCreateManagerException();
         }
 
 
