@@ -53,7 +53,7 @@ public class ItemDetailScreen extends Screen {
             p.append('\n');
         }
         p.append("페이지: ").append(page + 1).append('\n');
-        p.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, 숫자: 해당 IO 제거)").append('\n');
+        p.append("(e: 뒤로가기, p: 이전 페이지, n: 다음 페이지, r: 아이템 삭제, 숫자: 해당 IO 제거)").append('\n');
         System.out.print(p);
     }
 
@@ -73,6 +73,10 @@ public class ItemDetailScreen extends Screen {
 
     private void addIODetail() {
         Main.screens.add(new ItemIOAddScreen(itemID, manager));
+    }
+
+    private void removeItem() {
+        Main.screens.add(new ItemRemoveScreen(itemID));
     }
 
     @Override
@@ -101,7 +105,7 @@ public class ItemDetailScreen extends Screen {
         } else if (selected.equalsIgnoreCase("x")) {
 
         } else if (selected.equalsIgnoreCase("r")) {
-
+            removeItem();
         }
 
         var selectedInt = Integer.parseInt(selected) - 1;
