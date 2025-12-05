@@ -21,13 +21,16 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
 
         var r = new Random();
         for (var i = 0; i < 5; i++) {
+            var categoryID = getRandomString(6);
+            var categoryName = getRandomString(4);
             items.add(new Item(
                     getRandomString(6),
                     getRandomString(12),
-                    getRandomString(6),
-                    getRandomString(4),
+                    categoryID,
+                    categoryName,
                     r.nextInt(10, 100)
             ));
+            categories.put(categoryID, new Category(categoryID, categoryName));
         }
     }
 
@@ -50,7 +53,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         return (page, search, categoryID) -> {
             var result = items.stream().toList();
             if (categoryID != null) {
-                result = result.stream().filter(item -> Objects.equals(item.category(), categoryID)).toList();
+                result = result.stream().filter(item -> Objects.equals(item.categoryID(), categoryID)).toList();
             }
             if (search != null && !search.isBlank()) {
                 result = result.stream().filter(item -> item.name().contains(search)).toList();
