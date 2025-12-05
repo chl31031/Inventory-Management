@@ -6,10 +6,10 @@ public record CreateIODetail(
         String managerId,
         String itemId,
         Integer quantity,
-        LocalDate date, //입고, 출고 날짜
+        LocalDate date,
         InAndOut io
 ) {
-    public enum InAndOut{
+    enum InAndOut{
     IN,
     OUT
     }

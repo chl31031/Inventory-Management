@@ -5,16 +5,6 @@ import org.example.dto.*;
 import java.util.List;
 
 public class ItemInterfaceImpl implements ItemInterface {
-    private static final ItemInterfaceImpl instance = new ItemInterfaceImpl();
-
-    private ItemInterfaceImpl(){
-
-    }
-
-    public static ItemInterfaceImpl getInstance(){
-        return instance;
-    }
-
     @Override
     public void createItem(CreateItem createItem) {
 
@@ -57,18 +47,5 @@ public class ItemInterfaceImpl implements ItemInterface {
     @Override
     public List<Item> searchFilteredItems(FilteredKeyword filteredKeyword) {
         return List.of();
-    }
-
-    @Override
-    public Item findById(String id) {
-/* createIODetail test용
-        System.out.println("가짜" + id);
-        return new Item(
-                id,
-                "name",
-                "category",
-                1000
-        );*/
-        return null;
     }
 }

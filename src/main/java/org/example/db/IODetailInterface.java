@@ -6,9 +6,7 @@ import org.example.dto.IODetail;
 import java.util.List;
 
 public interface IODetailInterface {
-    String createIODetail(CreateIODetail dto);
+    void createIODetail(CreateIODetail createIODetail);
+    void deleteIODetail(String id);
     List<IODetail> getIODetailByItemId(String id);
-    boolean deleteIODetail(String id);
-
-
 }
