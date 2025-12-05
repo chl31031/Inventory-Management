@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface CategoryInterface {
     List<String> getCategories();
-    void createCategory();
-    void deleteCategory();
+    void createCategory(String id);
+    void deleteCategory(String id);
 }
