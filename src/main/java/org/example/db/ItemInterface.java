@@ -14,4 +14,5 @@ public interface ItemInterface {
     Item getItemById(String id);
     List<Item> searchItems(String keyword);
     List<Item> searchFilteredItems(FilteredKeyword filteredKeyword);
+    List<Item> filteredItems(String category);
 }

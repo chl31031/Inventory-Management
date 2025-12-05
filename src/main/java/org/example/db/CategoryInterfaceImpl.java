@@ -2,8 +2,9 @@ package org.example.db;
 
 import org.example.util.DBConnection;
 import org.example.util.exception.AlreadyExistException;
-import org.example.util.exception.FkException;
-import org.example.util.exception.NoIdException;
+import org.example.util.exception.ChildEntityExistsException;
+import org.example.util.exception.NoChangedException;
+import org.example.util.exception.UnknownException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,6 +35,7 @@ public class CategoryInterfaceImpl implements CategoryInterface {
 
             psmt.close();
         } catch (SQLException e) {
+            throw new UnknownException();
         }
         return list;
     }
@@ -65,9 +67,11 @@ public class CategoryInterfaceImpl implements CategoryInterface {
             int i = psmt.executeUpdate();
             psmt.close();
 
-            if (i < 1) throw new NoIdException();
+            if (i < 1) throw new NoChangedException();
         } catch (SQLException e) {
-            throw new FkException();
+            int eCode = e.getErrorCode();
+            if(eCode==1451) throw new ChildEntityExistsException();
+            else throw new UnknownException();
         }
     }
 

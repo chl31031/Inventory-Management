@@ -2,7 +2,10 @@ package org.example.db;
 
 import org.example.dto.*;
 import org.example.util.DBConnection;
-import org.example.util.exception.NoIdException;
+import org.example.util.exception.NoChangedException;
+import org.example.util.exception.UnknownException;
+import org.example.util.exception.WrongCategoryException;
+import org.example.util.exception.WrongIdException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +42,9 @@ public class ItemInterfaceImpl implements ItemInterface {
 
             psmt.close();
         } catch (SQLException e) {
-            throw new NoIdException();
+            int eCode = e.getErrorCode();
+            if (eCode == 1452) throw new WrongCategoryException();
+            else throw new UnknownException();
         }
     }
 
@@ -71,7 +76,7 @@ public class ItemInterfaceImpl implements ItemInterface {
 
             psmt.close();
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
 
         return list;
@@ -88,7 +93,8 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.setString(1, id);
             ResultSet rs = psmt.executeQuery();
 
-            rs.next();
+            if (!rs.next()) throw new WrongIdException();
+
             String itemId = rs.getString(1);
             String name = rs.getString(2);
             String categoryId = rs.getString(3);
@@ -99,7 +105,7 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.close();
             return new OutItemDetail(item, details);
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
     }
 
@@ -114,10 +120,12 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.setString(1, updateItem.name());
             psmt.setString(2, updateItem.id());
 
-            psmt.executeUpdate();
+            int i = psmt.executeUpdate();
+            psmt.close();
+            if (i < 1) throw new NoChangedException();
             psmt.close();
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
     }
 
@@ -129,11 +137,12 @@ public class ItemInterfaceImpl implements ItemInterface {
                     """);
             psmt.setString(1, id);
 
-            psmt.executeUpdate();
-
+            int i = psmt.executeUpdate();
             psmt.close();
+
+            if (i < 1) throw new NoChangedException();
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
     }
 
@@ -147,11 +156,13 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.setInt(1, updateItemQuantity.quantity());
             psmt.setString(2, updateItemQuantity.id());
 
-            psmt.executeUpdate();
+            int i = psmt.executeUpdate();
 
             psmt.close();
+
+            if (i < 1) throw new NoChangedException();
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
     }
 
@@ -164,7 +175,7 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.setString(1, id);
 
             ResultSet rs = psmt.executeQuery();
-            rs.next();
+            if (!rs.next()) throw new WrongIdException();
 
             Item item = new Item(
                     rs.getString(1),
@@ -176,7 +187,7 @@ public class ItemInterfaceImpl implements ItemInterface {
             psmt.close();
             return item;
         } catch (SQLException e) {
-            throw new NoIdException();
+            throw new UnknownException();
         }
     }
 
@@ -202,6 +213,7 @@ public class ItemInterfaceImpl implements ItemInterface {
 
             psmt.close();
         } catch (SQLException e) {
+            throw new UnknownException();
         }
         return al;
     }
@@ -229,6 +241,7 @@ public class ItemInterfaceImpl implements ItemInterface {
 
             psmt.close();
         } catch (SQLException e) {
+            throw new UnknownException();
         }
         return al;
     }
@@ -255,6 +268,7 @@ public class ItemInterfaceImpl implements ItemInterface {
 
             psmt.close();
         } catch (SQLException e) {
+            throw new UnknownException();
         }
         return al;
     }
