@@ -7,7 +7,7 @@ import org.example.view.viewcontroller.GetManagerList;
 import java.util.List;
 import java.util.Scanner;
 
-public final class ManagerListScreen implements Screen {
+public final class ManagerListScreen extends Screen {
 
     private final GetManagerList getManagerList = Main.viewControllerContainer.getManagerList();
     private List<Manager> managerList = null;

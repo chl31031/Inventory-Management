@@ -8,7 +8,7 @@ import org.example.view.viewcontroller.GetItemList;
 import java.util.List;
 import java.util.Scanner;
 
-public final class ItemListScreen implements Screen {
+public final class ItemListScreen extends Screen {
     private final Manager manager;
     private final GetItemList getItemList = Main.viewControllerContainer.getItemList();
     private final int page;
