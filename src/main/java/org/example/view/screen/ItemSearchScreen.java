@@ -14,7 +14,13 @@ public class ItemSearchScreen extends Screen {
 
     private void printSearch() {
         var screenText = new StringBuilder();
-        screenText.append("현재 검색어: ").append(search).append('\n');
+        screenText.append("현재 검색어: ");
+        if (search == null || search.isBlank()) {
+            screenText.append("없음");
+        } else {
+            screenText.append(search);
+        }
+        screenText.append('\n');
         screenText.append("검색어 입력: ");
         System.out.print(screenText);
     }
