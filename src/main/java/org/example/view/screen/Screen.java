@@ -6,6 +6,10 @@ public abstract class Screen {
 
     private HashMap<String, String> result = new HashMap<>();
 
+    public boolean hasResult(String key) {
+        return this.result.containsKey(key);
+    }
+
     public String getResult(String key) {
         return this.result.get(key);
     }

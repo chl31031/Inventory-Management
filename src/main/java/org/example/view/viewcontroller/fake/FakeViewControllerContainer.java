@@ -1,33 +1,41 @@
 package org.example.view.viewcontroller.fake;
 
-import org.example.view.model.Category;
-import org.example.view.model.Item;
-import org.example.view.model.Manager;
+import org.example.view.model.*;
 import org.example.view.viewcontroller.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 public class FakeViewControllerContainer implements ViewControllerContainer {
 
     private final ArrayList<Manager> managers = new ArrayList<>();
     private final ArrayList<Item> items = new ArrayList<>();
     private final HashMap<String, Category> categories = new HashMap<>();
+    private final HashMap<String, ArrayList<ItemIO>> itemToItemIOList = new HashMap<>();
 
     public FakeViewControllerContainer() {
         managers.add(new Manager("id", "재우", "직급1"));
 
         var r = new Random();
         for (var i = 0; i < 5; i++) {
+            var itemID = getRandomString(6);
+            var categoryID = getRandomString(6);
+            var initialQuantity = r.nextInt(10, 100);
             items.add(new Item(
-                    getRandomString(6),
+                    itemID,
                     getRandomString(12),
-                    getRandomString(6),
-                    getRandomString(4),
-                    r.nextInt(10, 100)
+                    categoryID,
+                    categoryID,
+                    initialQuantity
             ));
+            categories.put(categoryID, new Category(categoryID, categoryID));
+
+            itemToItemIOList.put(itemID, new ArrayList<>(List.of(new ItemIO(
+                    getRandomString(6),
+                    initialQuantity,
+                    IO.IN,
+                    ZonedDateTime.now()
+            ))));
         }
     }
 
@@ -50,7 +58,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         return (page, search, categoryID) -> {
             var result = items.stream().toList();
             if (categoryID != null) {
-                result = result.stream().filter(item -> Objects.equals(item.category(), categoryID)).toList();
+                result = result.stream().filter(item -> Objects.equals(item.categoryID(), categoryID)).toList();
             }
             if (search != null && !search.isBlank()) {
                 result = result.stream().filter(item -> item.name().contains(search)).toList();
@@ -65,6 +73,45 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
         return (name) -> {
             var id = getRandomString(6);
             categories.put(id, new Category(id, name));
+        };
+    }
+
+    @Override
+    public GetCategoryList getCategoryList() {
+        return () -> categories.values().stream().toList();
+    }
+
+    @Override
+    public CreateItem createItem() {
+        return (name, categoryID) -> {
+            items.addFirst(new Item(
+                    getRandomString(6), name, categoryID, categoryID, 0
+            ));
+            categories.put(categoryID, new Category(categoryID, categoryID));
+        };
+    }
+
+    @Override
+    public GetItem getItem() {
+        return id -> {
+            for (var i = 0; i < items.size(); i++) {
+                var item = items.get(i);
+                if (item.id().equals(id)) {
+                    return item;
+                }
+            }
+            return null;
+        };
+    }
+
+    @Override
+    public GetItemIOList getItemIOList() {
+        return (itemID, page) -> {
+            if (!itemToItemIOList.containsKey(itemID)) {
+                itemToItemIOList.put(itemID, new ArrayList<>());
+            }
+            var result = itemToItemIOList.get(itemID);
+            return result.subList(Math.min(10 * page, result.size()), Math.min(10 * (page + 1), result.size()));
         };
     }
 

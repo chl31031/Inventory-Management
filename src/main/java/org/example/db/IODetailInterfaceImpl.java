@@ -95,5 +95,8 @@ public class IODetailInterfaceImpl implements IODetailInterface {
         return false;
     }
 
-}
 
+    public static IODetailInterfaceImpl getInstance(){
+        return null;
+    }
+}
