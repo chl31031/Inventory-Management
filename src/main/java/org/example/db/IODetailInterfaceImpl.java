@@ -5,6 +5,9 @@ import org.example.dto.IODetail;
 import org.example.dto.Item;
 import org.example.dto.Manager;
 import org.example.util.DBConnection;
+import org.example.util.exception.NoIdException;
+import org.example.util.exception.NoItemException;
+import org.example.util.exception.NoManagerException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,13 +30,11 @@ public class IODetailInterfaceImpl implements IODetailInterface {
         String newId = UUID.randomUUID().toString();
         PreparedStatement pstmt = null;
         try {
-            if (conn != null) {
+            if (conn != null)
+                pstmt = conn.prepareStatement(INSERT_QUERY);
 
-            }
-            pstmt = conn.prepareStatement(INSERT_QUERY);
-
-            pstmt.setString(1, newId); // id
-            pstmt.setString(2, dto.io().name());//
+            pstmt.setString(1, newId);
+            pstmt.setString(2, dto.io().name());//IN_OUT
             pstmt.setInt(3, dto.quantity());
             pstmt.setDate(4, Date.valueOf(dto.date()));
             pstmt.setString(5, dto.managerId());
@@ -45,7 +46,7 @@ public class IODetailInterfaceImpl implements IODetailInterface {
                 return newId;
             }
         } catch (SQLException e) {
-
+            throw new UnKnownException(e);
         }finally {
             DBConnection.closeResources(pstmt, null);
         }
@@ -60,32 +61,36 @@ public class IODetailInterfaceImpl implements IODetailInterface {
         List<IODetail> ioDetails = new ArrayList<>(); //리스트 초기화
 
         try (PreparedStatement pstmt = conn.prepareStatement(SELECT_BY_ITEM_ID_QUERY)) {
-
             pstmt.setString(1, id);
+
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 while (rs.next()) {
                     String managerId = rs.getString("MANAGER_ID");
                     String itemId = rs.getString("ITEM_ID");
 
-                    //
                     Manager manager = managerDao.getManagerById(managerId);
                     Item item = itemDao.getItemById(itemId);
 
-                    if (manager != null && item != null) {
-                        IODetail detail = new IODetail(
-                                rs.getString("ID"),
-                                rs.getString("IN_OUT"),
-                                rs.getInt("QUANTITY"),
-                                manager,
-                                item
-                        );
-                        ioDetails.add(detail);
+                    if (manager == null) {
+                        throw new NoManagerException("Manager id not found" + managerId);
                     }
+                    if (item == null) {
+                        throw new NoItemException("Item Id not found" +  itemId);
+                    }
+                    IODetail detail = new IODetail(
+                            rs.getString("ID"),
+                            rs.getString("IN_OUT"),
+                            rs.getInt("QUANTITY"),
+                            rs.getDate("IO_DATE"),
+                            manager,
+                            item
+                    );
+                    ioDetails.add(detail);
                 }
             }
         } catch (SQLException e) {
-
+            throw new UnKnownException(e);
         }
         return ioDetails;
     }
