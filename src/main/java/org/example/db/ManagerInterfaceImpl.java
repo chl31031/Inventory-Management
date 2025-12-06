@@ -90,7 +90,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
 
         } catch (Exception e) {
-            throw new NoCreateManagerException();
+            throw new UnknownException();
         }
 
 
@@ -115,7 +115,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
             return new Manager(foundId,name,grade);
 
         }catch (SQLException e){
-            throw new WrongIdException();
+            throw new UnknownException();
         }
     }
 }
