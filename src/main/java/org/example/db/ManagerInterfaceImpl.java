@@ -3,16 +3,21 @@ package org.example.db;
 import org.example.dto.CreateManager;
 import org.example.dto.Manager;
 import org.example.util.DBConnection;
+import org.example.util.exception.NoCreateManagerException;
+import org.example.util.exception.UnknownException;
+import org.example.util.exception.WrongIdException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class ManagerInterfaceImpl implements ManagerInterface {
     private static ManagerInterfaceImpl instance;
+
 
     private ManagerInterfaceImpl() {
 
@@ -55,6 +60,7 @@ public class ManagerInterfaceImpl implements ManagerInterface {
             }//end while
             pstmt.close();
         } catch (Exception e) {
+            throw new UnknownException();
         }
 
         return managerList;
@@ -84,14 +90,32 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
 
         } catch (Exception e) {
-
+            throw new UnknownException();
         }
 
 
     }
 
     @Override
-    public Manager getManagerById(String id){
-        return null;
+    public Manager getManagerById(String id) {
+        try{
+        Connection conn = DBConnection.getConnection();
+        String sql = """
+                SELECT * FROM MANAGER WHERE ID = ?
+                """;
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, id);
+        ResultSet rs = pstmt.executeQuery();
+
+        rs.next();
+            String foundId = rs.getString("ID");
+            String name = rs.getString("name");
+            String grade = rs.getString("Grade");
+
+            return new Manager(foundId,name,grade);
+
+        }catch (SQLException e){
+            throw new UnknownException();
+        }
     }
 }
