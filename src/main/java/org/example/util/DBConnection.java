@@ -1,5 +1,7 @@
 package org.example.util;
 
+import org.example.util.exception.UnknownException;
+
 import java.sql.*;
 
 public class DBConnection {
