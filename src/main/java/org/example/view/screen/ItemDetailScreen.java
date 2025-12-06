@@ -3,6 +3,7 @@ package org.example.view.screen;
 import org.example.Main;
 import org.example.view.model.Item;
 import org.example.view.model.ItemIO;
+import org.example.view.model.Manager;
 import org.example.view.viewcontroller.GetItem;
 import org.example.view.viewcontroller.GetItemIOList;
 
@@ -14,22 +15,24 @@ import java.util.Scanner;
 public class ItemDetailScreen extends Screen {
 
     private final String itemID;
+    private final Manager manager;
     private Item item;
     private List<ItemIO> ioList = null;
     private final GetItem getItem = Main.viewControllerContainer.getItem();
     private final GetItemIOList getItemIOList = Main.viewControllerContainer.getItemIOList();
     private int page;
 
-    public ItemDetailScreen(String itemID, int page) {
+    public ItemDetailScreen(String itemID, Manager manager, int page) {
         this.itemID = itemID;
+        this.manager = manager;
         if (page < 0) {
             page = 0;
         }
         this.page = page;
     }
 
-    public ItemDetailScreen(String itemID) {
-        this(itemID, 0);
+    public ItemDetailScreen(String itemID, Manager manager) {
+        this(itemID, manager, 0);
     }
 
     private void printItem() {
@@ -45,6 +48,7 @@ public class ItemDetailScreen extends Screen {
             p.append(i + 1).append(". ");
             p.append(io.io()).append(" ");
             p.append(io.quantity()).append(" ");
+            p.append(io.managerName()).append(" ");
             p.append(io.time().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))).append(" ");
             p.append('\n');
         }
@@ -55,16 +59,20 @@ public class ItemDetailScreen extends Screen {
 
     private void nextPage() {
         Main.screens.removeLast();
-        Main.screens.add(new ItemDetailScreen(itemID, page + 1));
+        Main.screens.add(new ItemDetailScreen(itemID, manager, page + 1));
     }
 
     private void prevPage() {
         Main.screens.removeLast();
-        Main.screens.add(new ItemDetailScreen(itemID, page - 1));
+        Main.screens.add(new ItemDetailScreen(itemID, manager, page - 1));
     }
 
     private void exit() {
         Main.screens.removeLast();
+    }
+
+    private void addIODetail() {
+        Main.screens.add(new ItemIOAddScreen(itemID, manager));
     }
 
     @Override
@@ -89,7 +97,7 @@ public class ItemDetailScreen extends Screen {
         } else if (selected.equalsIgnoreCase("e")) {
             exit();
         } else if (selected.equalsIgnoreCase("a")) {
-
+            addIODetail();
         } else if (selected.equalsIgnoreCase("x")) {
 
         } else if (selected.equalsIgnoreCase("r")) {

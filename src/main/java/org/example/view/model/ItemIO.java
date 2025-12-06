@@ -6,6 +6,7 @@ public record ItemIO(
         String id,
         int quantity,
         IO io,
+        String managerName,
         ZonedDateTime time
 ) {
 }
