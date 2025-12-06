@@ -34,6 +34,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
                     getRandomString(6),
                     initialQuantity,
                     IO.IN,
+                    "재우",
                     ZonedDateTime.now()
             ))));
         }
@@ -112,6 +113,48 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
             }
             var result = itemToItemIOList.get(itemID);
             return result.subList(Math.min(10 * page, result.size()), Math.min(10 * (page + 1), result.size()));
+        };
+    }
+
+    @Override
+    public CreateItemIO createItemIO() {
+        return (itemID, io, quantity, managerID) -> {
+            var manager = managers.stream().filter(m -> Objects.equals(m.id(), managerID)).findFirst().orElse(null);
+            if (manager == null) {
+                return;
+            }
+
+            for (var i = 0; i < items.size(); i++) {
+                var item = items.get(i);
+                if (item.id().equals(itemID)) {
+                    items.remove(i);
+                    var newQuantity = item.quantity();
+                    if (io == IO.IN) {
+                        newQuantity += quantity;
+                    } else {
+                        newQuantity -= quantity;
+                    }
+                    items.addFirst(new Item(
+                            item.id(),
+                            item.name(),
+                            item.categoryID(),
+                            item.category(),
+                            newQuantity
+                    ));
+
+                    if (!itemToItemIOList.containsKey(itemID)) {
+                        itemToItemIOList.put(itemID, new ArrayList<>());
+                    }
+                    itemToItemIOList.get(itemID).addFirst(new ItemIO(
+                            getRandomString(6),
+                            quantity,
+                            io,
+                            manager.name(),
+                            ZonedDateTime.now()
+                    ));
+                    return;
+                }
+            }
         };
     }
 

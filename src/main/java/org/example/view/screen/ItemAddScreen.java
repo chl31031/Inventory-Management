@@ -28,7 +28,7 @@ public class ItemAddScreen extends Screen {
         }
 
         if (itemName != null && !itemName.isBlank() && hasResult(ResultKey.CATEGORY_ID) && getResult(ResultKey.CATEGORY_ID) != null) {
-            createItem.createItem(itemName, getResult(ResultKey.CATEGORY_ID));
+            createItem.execute(itemName, getResult(ResultKey.CATEGORY_ID));
             Main.screens.removeLast();
             return;
         }
