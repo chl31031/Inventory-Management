@@ -103,7 +103,6 @@ public class ManagerInterfaceImpl implements ManagerInterface {
         String sql = """
                 SELECT * FROM MANAGER WHERE ID = ?
                 """;
-
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, id);
         ResultSet rs = pstmt.executeQuery();
