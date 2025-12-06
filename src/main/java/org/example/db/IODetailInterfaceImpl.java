@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class IODetailInterfaceImpl implements IODetailInterface {
     private Connection conn = DBConnection.getConnection();
+    private static final IODetailInterface INSTANCE = new IODetailInterfaceImpl();
 
     private final ManagerInterface managerDao = ManagerInterfaceImpl.getInstance();
     private final ItemInterface itemDao = ItemInterfaceImpl.getInstance();
@@ -96,7 +97,10 @@ public class IODetailInterfaceImpl implements IODetailInterface {
     }
 
 
-    public static IODetailInterfaceImpl getInstance(){
-        return null;
+    public static IODetailInterface getInstance(){
+        return INSTANCE;
+    }
+
+    private IODetailInterfaceImpl() {
     }
 }
