@@ -89,4 +89,9 @@ public class ManagerInterfaceImpl implements ManagerInterface {
 
 
     }
+
+    @Override
+    public Manager getManagerById(String id){
+        return null;
+    }
 }
