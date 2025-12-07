@@ -56,7 +56,7 @@ public class DBViewControllerContainer implements ViewControllerContainer {
 
     @Override
     public CreateCategory createCategory() {
-        return (category) ->
+        return category ->
                 CategoryInterfaceImpl.getInstance().createCategory(category);
     }
 
@@ -69,12 +69,13 @@ public class DBViewControllerContainer implements ViewControllerContainer {
     @Override
     public CreateItem createItem() {
         return (name, id) -> ItemInterfaceImpl.getInstance().createItem(
-                new org.example.dto.CreateItem(name, id));
+                new org.example.dto.CreateItem(name, id)
+        );
     }
 
     @Override
     public GetItem getItem() {
-        return (id) -> {
+        return id -> {
             var itemDto = ItemInterfaceImpl.getInstance().getItemById(id);
 
             return new Item(
@@ -97,14 +98,25 @@ public class DBViewControllerContainer implements ViewControllerContainer {
                 IODetailInterfaceImpl.getInstance().createIODetail(
                         new CreateIODetail(managerID, itemID, quantity,
                                 LocalDate.now(),//Todo 시간을 안받음
-                                io == io.IN ? InAndOut.IN : InAndOut.OUT
+                                io == IO.IN ? InAndOut.IN : InAndOut.OUT
                         )
                 );
     }
 
     @Override
     public DeleteItemIO deleteItemIO() {
-        return (ioID) -> IODetailInterfaceImpl.getInstance().deleteIODetail(ioID);
+        return ioID -> IODetailInterfaceImpl.getInstance().deleteIODetail(ioID);
+    }
+
+    @Override
+    public DeleteItem deleteItem() {
+        return itemID -> ItemInterfaceImpl.getInstance().deleteItem(itemID);
+    }
+
+    @Override
+    public UpdateItem updateItem() {
+        return (itemID, name) ->
+                ItemInterfaceImpl.getInstance().updateItem(new org.example.dto.UpdateItem(itemID, name));
     }
 
     private Item toModel(org.example.dto.Item i) {
