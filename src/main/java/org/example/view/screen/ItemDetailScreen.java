@@ -10,6 +10,7 @@ import org.example.view.viewcontroller.GetItemIOList;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ItemDetailScreen extends Screen {
@@ -85,6 +86,10 @@ public class ItemDetailScreen extends Screen {
 
     @Override
     public void action() {
+        if (Objects.equals(getResult(ResultKey.ITEM_DELETED), "ok")) {
+            Main.screens.removeLast();
+            return;
+        }
         this.item = getItem.execute(itemID);
         if (item == null) {
             Main.screens.removeLast();
