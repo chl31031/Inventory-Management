@@ -26,9 +26,13 @@ public class ItemRemoveScreen extends Screen {
         var scanner = new Scanner(System.in);
         System.out.println(item.name() + "을 삭제? (Y/N)");
         var line = scanner.nextLine();
+        System.out.println();
         if (line.equalsIgnoreCase("Y")) {
             deleteItem.deleteItem(itemID);
             Main.screens.removeLast();
+            Main.screens.getLast().setResult(ResultKey.ITEM_DELETED, "ok");
+            System.out.println(item.name() + " 삭제 성공");
+            System.out.println();
         }
         if (line.equalsIgnoreCase("N")) {
             Main.screens.removeLast();
