@@ -54,7 +54,7 @@ public class IODetailInterfaceImpl implements IODetailInterface {
     }
 
     private static final String SELECT_BY_ITEM_ID_QUERY =
-            "SELECT ID, IN_OUT, QUANTITY, IO_DATE, MANAGER_ID, ITEM_ID FROM IODetail WHERE ITEM_ID = ?";
+            "SELECT ID, IN_OUT, QUANTITY, IO_DATE, MANAGER_ID, ITEM_ID FROM IO_DETAIL WHERE ITEM_ID = ?";
 
     @Override
     public List<IODetail> getIODetailByItemId(String id) {
