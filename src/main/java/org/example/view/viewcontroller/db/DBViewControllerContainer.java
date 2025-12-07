@@ -102,6 +102,11 @@ public class DBViewControllerContainer implements ViewControllerContainer {
                 );
     }
 
+    @Override
+    public DeleteItemIO deleteItemIO() {
+        return (ioID) -> IODetailInterfaceImpl.getInstance().deleteIODetail(ioID);
+    }
+
     private Item toModel(org.example.dto.Item i) {
         return new Item(i.id(), i.name(), i.category(), i.category(), i.quantity());
     }
