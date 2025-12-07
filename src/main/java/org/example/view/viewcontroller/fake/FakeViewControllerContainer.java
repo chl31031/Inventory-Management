@@ -166,7 +166,7 @@ public class FakeViewControllerContainer implements ViewControllerContainer {
                     var io = v.get(i);
                     if (Objects.equals(io.id(), ioID)) {
                         v.remove(i);
-                        for (var j = 0; i < items.size(); j++) {
+                        for (var j = 0; j < items.size(); j++) {
                             var item = items.get(j);
                             if (item.id().equals(itemID)) {
                                 items.remove(j);
